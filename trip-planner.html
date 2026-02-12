@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Argentina Group Trip Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .intensity-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .radio-item label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            display: none;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .timeline {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .timeline h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .person-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .person-name {
+            width: 120px;
+            font-weight: 600;
+        }
+
+        .date-bar {
+            flex: 1;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .matches {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .match-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .match-header {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .match-details {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .activity-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇦🇷 Argentina Group Trip Planner</h1>
+            <p>Share your dates and preferences to find the perfect group activities!</p>
+        </div>
+
+        <form id="tripForm" class="form-section">
+            <div class="form-group">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email (optional, for updates)</label>
+                <input type="email" id="email">
+            </div>
+
+            <div class="form-group">
+                <label for="arrivalDate">Arrival Date in Argentina *</label>
+                <input type="date" id="arrivalDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="departureDate">Departure Date from Argentina *</label>
+                <input type="date" id="departureDate" required>
+            </div>
+
+            <div class="form-group">
+                <label>What activities interest you? (Select all that apply) *</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hiking" value="Hiking/Trekking">
+                        <label for="hiking">Hiking/Trekking</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="wine" value="Wine Tasting">
+                        <label for="wine">Wine Tasting</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="city" value="City Tours">
+                        <label for="city">City Tours</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="food" value="Food Tours">
+                        <label for="food">Food Tours</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="nightlife" value="Nightlife">
+                        <label for="nightlife">Nightlife</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="nature" value="Nature/Wildlife">
+                        <label for="nature">Nature/Wildlife</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="adventure" value="Adventure Sports">
+                        <label for="adventure">Adventure Sports</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="culture" value="Cultural Sites">
+                        <label for="culture">Cultural Sites</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="beach" value="Beach/Relaxation">
+                        <label for="beach">Beach/Relaxation</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="shopping" value="Shopping">
+                        <label for="shopping">Shopping</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Preferred activity intensity *</label>
+                <div class="intensity-group">
+                    <div class="radio-item">
+                        <input type="radio" id="relaxed" name="intensity" value="Relaxed" required>
+                        <label for="relaxed">Relaxed</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="moderate" name="intensity" value="Moderate">
+                        <label for="moderate">Moderate</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="active" name="intensity" value="Active">
+                        <label for="active">Active</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="destinations">Specific destinations you want to visit in Argentina (optional)</label>
+                <textarea id="destinations" placeholder="e.g., Buenos Aires, Mendoza, Patagonia, Iguazu Falls..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Any other preferences or notes? (optional)</label>
+                <textarea id="notes" placeholder="Budget constraints, mobility considerations, must-see places, etc."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit My Preferences</button>
+        </form>
+
+        <div id="results" class="results-section">
+            <h2 style="margin-bottom: 20px; color: #667eea;">📊 Group Analysis</h2>
+            
+            <div class="timeline" id="timelineSection"></div>
+            
+            <div class="matches" id="matchesSection"></div>
+
+            <button onclick="resetForm()" class="submit-btn" style="margin-top: 20px;">Add Another Person</button>
+        </div>
+    </div>
+
+    <script>
+        let groupData = JSON.parse(localStorage.getItem('argentinaTrip')) || [];
+
+        const form = document.getElementById('tripForm');
+        const resultsSection = document.getElementById('results');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const activities = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+                activities.push(cb.value);
+            });
+
+            if (activities.length === 0) {
+                alert('Please select at least one activity!');
+                return;
+            }
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                arrivalDate: document.getElementById('arrivalDate').value,
+                departureDate: document.getElementById('departureDate').value,
+                activities: activities,
+                intensity: document.querySelector('input[name="intensity"]:checked').value,
+                destinations: document.getElementById('destinations').value,
+                notes: document.getElementById('notes').value
+            };
+
+            groupData.push(formData);
+            localStorage.setItem('argentinaTrip', JSON.stringify(groupData));
+
+            displayResults();
+        });
+
+        function displayResults() {
+            form.parentElement.style.display = 'none';
+            resultsSection.classList.add('active');
+
+            // Generate timeline
+            generateTimeline();
+
+            // Generate matches
+            generateMatches();
+        }
+
+        function generateTimeline() {
+            const timelineSection = document.getElementById('timelineSection');
+            
+            // Find date range
+            let earliestDate = new Date(groupData[0].arrivalDate);
+            let latestDate = new Date(groupData[0].departureDate);
+            
+            groupData.forEach(person => {
+                const arrival = new Date(person.arrivalDate);
+                const departure = new Date(person.departureDate);
+                if (arrival < earliestDate) earliestDate = arrival;
+                if (departure > latestDate) latestDate = departure;
+            });
+
+            const totalDays = Math.ceil((latestDate - earliestDate) / (1000 * 60 * 60 * 24)) + 1;
+
+            let html = '<h3>📅 Group Timeline</h3>';
+            html += '<div style="margin-bottom: 20px; color: #666; font-size: 14px;">';
+            html += `Trip window: ${earliestDate.toLocaleDateString()} - ${latestDate.toLocaleDateString()} (${totalDays} days)`;
+            html += '</div>';
+
+            groupData.forEach(person => {
+                const arrival = new Date(person.arrivalDate);
+                const departure = new Date(person.departureDate);
+                const days = Math.ceil((departure - arrival) / (1000 * 60 * 60 * 24)) + 1;
+                
+                html += `
+                    <div class="person-row">
+                        <div class="person-name">${person.name}</div>
+                        <div class="date-bar">
+                            ${arrival.toLocaleDateString()} - ${departure.toLocaleDateString()} (${days} days)
+                        </div>
+                    </div>
+                `;
+            });
+
+            timelineSection.innerHTML = html;
+        }
+
+        function generateMatches() {
+            const matchesSection = document.getElementById('matchesSection');
+            
+            let html = '<h3>🎯 Recommended Group Activities</h3>';
+
+            // Find overlapping dates
+            const overlaps = findOverlaps();
+            
+            if (overlaps.length === 0) {
+                html += '<p style="color: #666;">No overlapping dates found yet. Add more people to find matches!</p>';
+            } else {
+                overlaps.forEach(overlap => {
+                    const commonActivities = findCommonActivities(overlap.people);
+                    
+                    html += `
+                        <div class="match-item">
+                            <div class="match-header">
+                                ${overlap.people.map(p => p.name).join(', ')} 
+                                (${overlap.people.length} people)
+                            </div>
+                            <div class="match-details">
+                                <strong>Available:</strong> ${overlap.startDate.toLocaleDateString()} - ${overlap.endDate.toLocaleDateString()} 
+                                (${overlap.days} days)
+                            </div>
+                            ${commonActivities.length > 0 ? `
+                                <div style="margin-top: 10px;">
+                                    <strong>Shared interests:</strong><br>
+                                    ${commonActivities.map(a => `<span class="activity-tag">${a}</span>`).join('')}
+                                </div>
+                            ` : '<div style="margin-top: 10px; color: #999;">No common activities selected</div>'}
+                        </div>
+                    `;
+                });
+            }
+
+            // Activity popularity analysis
+            html += '<h3 style="margin-top: 30px;">📈 Most Popular Activities</h3>';
+            const activityCounts = {};
+            groupData.forEach(person => {
+                person.activities.forEach(activity => {
+                    activityCounts[activity] = (activityCounts[activity] || 0) + 1;
+                });
+            });
+
+            const sortedActivities = Object.entries(activityCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            if (sortedActivities.length > 0) {
+                html += '<div style="margin-top: 15px;">';
+                sortedActivities.forEach(([activity, count]) => {
+                    const percentage = Math.round((count / groupData.length) * 100);
+                    html += `
+                        <div style="margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>${activity}</span>
+                                <span style="color: #667eea; font-weight: 600;">${count}/${groupData.length} (${percentage}%)</span>
+                            </div>
+                            <div style="background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; width: ${percentage}%;"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+
+            matchesSection.innerHTML = html;
+        }
+
+        function findOverlaps() {
+            const overlaps = [];
+            
+            // Check all combinations
+            for (let i = 0; i < groupData.length; i++) {
+                for (let j = i + 1; j < groupData.length; j++) {
+                    const person1 = groupData[i];
+                    const person2 = groupData[j];
+                    
+                    const start1 = new Date(person1.arrivalDate);
+                    const end1 = new Date(person1.departureDate);
+                    const start2 = new Date(person2.arrivalDate);
+                    const end2 = new Date(person2.departureDate);
+                    
+                    const overlapStart = start1 > start2 ? start1 : start2;
+                    const overlapEnd = end1 < end2 ? end1 : end2;
+                    
+                    if (overlapStart <= overlapEnd) {
+                        const days = Math.ceil((overlapEnd - overlapStart) / (1000 * 60 * 60 * 24)) + 1;
+                        overlaps.push({
+                            people: [person1, person2],
+                            startDate: overlapStart,
+                            endDate: overlapEnd,
+                            days: days
+                        });
+                    }
+                }
+            }
+
+            // Sort by number of days (longest first)
+            overlaps.sort((a, b) => b.days - a.days);
+            
+            return overlaps;
+        }
+
+        function findCommonActivities(people) {
+            if (people.length === 0) return [];
+            
+            const firstPersonActivities = new Set(people[0].activities);
+            const common = [];
+            
+            firstPersonActivities.forEach(activity => {
+                if (people.every(person => person.activities.includes(activity))) {
+                    common.push(activity);
+                }
+            });
+            
+            return common;
+        }
+
+        function resetForm() {
+            form.parentElement.style.display = 'block';
+            resultsSection.classList.remove('active');
+            form.reset();
+        }
+
+        // Show existing data if available
+        if (groupData.length > 0) {
+            displayResults();
+        }
+    </script>
+</body>
+</html>
